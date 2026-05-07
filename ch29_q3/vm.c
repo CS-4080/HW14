@@ -546,6 +546,19 @@ static InterpretResult run() {
         push(value);
         break;
       }
+
+      case OP_INNER: {
+        ObjBoundMethod* current = vm.currentBoundMethod;
+        int next = current->index + 1;
+
+        if (next >= current->chain->count) {
+          push(NIL_VAL);
+          break;
+        }
+
+        call(current->chain->methods[next], argCount);
+        break;
+      }
 //< Global Variables interpret-get-global
 //> Global Variables interpret-define-global
       case OP_DEFINE_GLOBAL: {
