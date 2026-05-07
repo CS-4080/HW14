@@ -1,0 +1,17 @@
+class Foo {
+  init(a, b, c) {
+    this.a = a;
+    this.b = b;
+    this.c = c;
+  }
+}
+
+var start = clock();
+
+var i = 0;
+while (i < 5000000) {
+  Foo(i, i + 1, i + 2);
+  i = i + 1;
+}
+
+print clock() - start;
