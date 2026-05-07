@@ -299,14 +299,17 @@ static bool invoke(ObjString* name, int argCount) {
 //< Methods and Initializers invoke
 //> Methods and Initializers bind-method
 static bool bindMethod(ObjClass* klass, ObjString* name) {
-  Value method;
-  if (!tableGet(&klass->methods, name, &method)) {
+  Value value;
+  if (!tableGet(&klass->methods, name, &value)) {
     runtimeError("Undefined property '%s'.", name->chars);
     return false;
   }
 
-  ObjBoundMethod* bound = newBoundMethod(peek(0),
-                                         AS_CLOSURE(method));
+  ObjMethodChain* chain = AS_METHOD_CHAIN(value);
+
+  ObjBoundMethod* bound =
+      newBoundMethod(peek(0), chain->methods[0], chain, 0);
+
   pop();
   push(OBJ_VAL(bound));
   return true;
